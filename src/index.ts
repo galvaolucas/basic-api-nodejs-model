@@ -90,9 +90,6 @@ async authorize() {
 
 async listFiles(authClient: any): Promise<void> {
   const drive = google.drive({version: 'v3', auth: authClient});
-  const script = google.script({version: 'v1', auth: authClient});
-
-  let link = '';
 
   const res = await drive.files.list({
     q: "name contains 'Planilha de Nomes de Produtos'",
@@ -130,46 +127,54 @@ async listFiles(authClient: any): Promise<void> {
   },
   { responseType: "arraybuffer" });
 
-  const content = Buffer.from(String(bufferFile.data))
+  const readBufferFile = await drive.files.get({
+    supportsAllDrives: true,
+    fileId: files[0].id,
+    alt: 'media',
+  },
+  { responseType: "stream" });
 
-  // console.log(content);
-
-
-  // const convert = await script.projects.getContent({
-  //   alt: 'media',
-  // })
-
-  // const xlsxFile = xlsx.readFile(bufferFile.data);
-
-  // const file = fs.writeFile('test', bufferFile.data)
-
-  console.log('data', bufferFile.data);
-
-  this.getExcel (authClient, bufferFile.data);
+  this.getWorkSheetData(authClient, bufferFile.data);
+  
+  this.readExcel(authClient, readBufferFile.data);
 
 }
 
 async accessSpreadsheet (fileId: string) {
   const content = await fs.readFile(this.client_secret);
+  
   const keys = JSON.parse(String(content));
 
   const doc = new GoogleSpreadsheet(fileId);
+  
   await doc.useServiceAccountAuth(keys);
 
 }
 
 
-async getExcel (authClient: any, buffer: Buffer | any) {
+async getWorkSheetData (authClient: any, buffer: Buffer | any) {
+  
   const wb = new Excel.Workbook();
 
   const file = await wb.xlsx.load(buffer);
 
-  console.log('começo', file.worksheets[0].eachRow);
+}
+
+async readExcel (authClient: any, buffer: Buffer | any) {
+  
+  const wb = new Excel.Workbook();
+
+  const read = await wb.xlsx.read(buffer);
+
+  //modificando o array, é possível acessar cada uma das worksheets
+
+  //pelos métodos, também é possível adicionar linhas, colunas, escrever na planilha, etc..
+
+  console.log('dados do arquivo', read.worksheets[1].getSheetValues());
+
 }
 
 }
 
-
-// export const drive = () => authorize().then(listFiles).catch(console.error);
 
 export const drive = new DriveFiles;
