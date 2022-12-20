@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import 'reflect-metadata';
 import routes from './shared/http/routes';
-import './shared/container';
 import { drive } from '.';
 
 const app = express();
@@ -21,6 +20,7 @@ app.listen(process.env.PORT || 3333, () => {
     console.log('Server running!')
 });
 
+//realiza autenticação e lista os arquivos do diretório
 drive.authorize().then((res: any) => {
     drive.listFiles(res);
 });

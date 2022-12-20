@@ -120,7 +120,6 @@ async listFiles(authClient: any): Promise<void> {
        ModifiedTime: ${file.modifiedTime} \n
        mimeType: ${file.mimeType} \n
        webViewLink: ${file.webViewLink} \n
-       webViewLink: ${file.webViewLink} \n
       `);
   });
 
