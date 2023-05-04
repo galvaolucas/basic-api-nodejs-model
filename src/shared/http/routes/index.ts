@@ -10,8 +10,9 @@ routes.get('/', function(req, res) {
     }) 
 });
 
-routes.get('/asBuiltAndTVO', async (req, res): Promise<any> => {
-  const data = await controller.getAsBuiltAndTVO();
+routes.get('/asBuiltAndTVO/:codigo', async (req, res): Promise<any> => {
+  const { codigo } = req.params;
+  const data = await controller.getAsBuiltAndTVO(codigo);
   return res.json(data);
 })
 
