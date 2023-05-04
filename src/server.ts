@@ -22,7 +22,7 @@ app.use(routes);
 
 app.listen(process.env.PORT || 3333, async () => {
     console.log('Server running!')
-    // await getAsBuiltAndTVO(process.env.TEAM_DRIVE_ID);
+    await getAsBuiltAndTVO(process.env.TEAM_DRIVE_ID, '0000');
 });
 
 export default app;
