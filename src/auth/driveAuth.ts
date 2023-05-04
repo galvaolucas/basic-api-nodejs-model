@@ -51,7 +51,7 @@ async loadSavedCredentialsIfExist(): Promise<any> {
     const credentials = JSON.parse(String(content));
     return google.auth.fromJSON({...credentials, refresh_token: credentials.access_token});
   } catch (err) {
-    console.log('err', err);
+    console.error('err', err);
   }
 }
 
@@ -72,7 +72,6 @@ async saveCredentials(client: IClient): Promise<void> {
 async authorize() {
   let client = await this.loadSavedCredentialsIfExist();
   if (client) {
-    console.log('entro')
     return client;
   }
 

@@ -2,10 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import 'reflect-metadata';
 import routes from './shared/http/routes';
-import { driveAuth } from './driveAuth';
-import { createFile } from './uploadToFolder';
+import dotenv from 'dotenv';
+import { getAsBuiltAndTVO } from './methods/getAsBuildAndTVO';
+import { driveAuth } from './auth/driveAuth';
 
 const app = express();
+
+dotenv.config();
 
 app.use(cors());
 
@@ -19,13 +22,8 @@ app.use(routes);
 
 app.listen(process.env.PORT || 3333, async () => {
     console.log('Server running!')
-    await createFile();
+    // await getAsBuiltAndTVO(process.env.TEAM_DRIVE_ID);
 });
-
-//realiza autenticação e lista os arquivos do diretório
-// driveAuth.authorize().then((res: any) => {
-//     console.log('autorizado!')
-// }).then(() => createFile());
 
 export default app;
 
